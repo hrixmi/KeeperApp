@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
@@ -45,43 +45,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CreateArea(props) {
+function CreateArea({ onAdd }) {
   const classes = useStyles();
-  const [note, setNote] = useState({
+  const [note, setNote] = React.useState({
     title: "",
     content: "",
   });
+  const [isExpanded, setExpanded] = React.useState(false);
+  const [shake, setShake] = React.useState(false);
 
-  const [isExpanded, setExpanded] = useState(false);
-  const [shake, setShake] = useState(false);
-
-  function handleChange(event) {
+  const handleChange = React.useCallback((event) => {
     const { name, value } = event.target;
-    setNote((prevNote) => ({
+    setNote(prevNote => ({
       ...prevNote,
       [name]: value,
     }));
-  }
+  }, []);
 
-  function submitNote(event) {
-    if (note.title.trim() === "" && note.content.trim() === "") {
-      // Trigger the shake animation if both fields are empty
-      setShake(true);
-      setTimeout(() => setShake(false), 500); // Remove shake class after animation
-    } else {
-      props.onAdd(note);
-      setNote({
-        title: "",
-        content: "",
-      });
-      setExpanded(false); // Collapse the form after submitting
-    }
+  const submitNote = React.useCallback((event) => {
     event.preventDefault();
-  }
+    
+    if (note.title.trim() === "" && note.content.trim() === "") {
+      setShake(true);
+      const timer = setTimeout(() => setShake(false), 500);
+      return () => clearTimeout(timer);
+    }
 
-  function expand() {
+    onAdd(note);
+    setNote({ title: "", content: "" });
+    setExpanded(false);
+  }, [note, onAdd]);
+
+  const expand = React.useCallback(() => {
     setExpanded(true);
-  }
+  }, []);
 
   return (
     <div>
@@ -122,4 +119,4 @@ function CreateArea(props) {
   );
 }
 
-export default CreateArea;
+export default React.memo(CreateArea);

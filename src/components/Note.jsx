@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
@@ -42,16 +42,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Note(props) {
+function Note({ id, title, content, onDelete }) {
   const classes = useStyles();
-  const [style, setStyle] = useState({});
+  const [style, setStyle] = React.useState({});
 
-  function handleMouseMove(event) {
+  const handleMouseMove = React.useCallback((event) => {
     const card = event.currentTarget;
     const { left, top, width, height } = card.getBoundingClientRect();
     const x = event.clientX - left - width / 2;
     const y = event.clientY - top - height / 2;
-    const maxTilt = 15; // Maximum tilt angle in degrees
+    const maxTilt = 15;
 
     const tiltX = (y / height) * maxTilt * -1;
     const tiltY = (x / width) * maxTilt;
@@ -60,18 +60,18 @@ function Note(props) {
       transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
       boxShadow: `0 8px 15px rgba(0, 0, 0, 0.2)`,
     });
-  }
+  }, []);
 
-  function handleMouseLeave() {
+  const handleMouseLeave = React.useCallback(() => {
     setStyle({
       transform: "rotateX(0deg) rotateY(0deg)",
       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     });
-  }
+  }, []);
 
-  function handleClick() {
-    props.onDelete(props.id);
-  }
+  const handleClick = React.useCallback(() => {
+    onDelete(id);
+  }, [id, onDelete]);
 
   return (
     <Card
@@ -82,10 +82,10 @@ function Note(props) {
     >
       <CardContent>
         <Typography className={classes.title} variant="h5">
-          {props.title}
+          {title}
         </Typography>
         <Typography className={classes.content} variant="body2">
-          {props.content}
+          {content}
         </Typography>
       </CardContent>
       <IconButton
@@ -99,4 +99,4 @@ function Note(props) {
   );
 }
 
-export default Note;
+export default React.memo(Note);
