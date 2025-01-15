@@ -5,6 +5,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   noteCard: {
@@ -40,11 +41,20 @@ const useStyles = makeStyles((theme) => ({
       color: "#d50042",
     },
   },
+  checkbox: {
+    position: 'absolute',
+    top: '8px',
+    right: '48px',
+    '&:hover': {
+      color: '#388e3c',
+    },
+  },
 }));
 
-function Note({ id, title, content, onDelete }) {
+function Note({ id, title, content, onDelete, onDone }) {
   const classes = useStyles();
   const [style, setStyle] = React.useState({});
+  const [checked, setChecked] = React.useState(false);
 
   const handleMouseMove = React.useCallback((event) => {
     const card = event.currentTarget;
@@ -73,6 +83,11 @@ function Note({ id, title, content, onDelete }) {
     onDelete(id);
   }, [id, onDelete]);
 
+  const handleCheckboxChange = React.useCallback((event) => {
+    setChecked(event.target.checked);
+    onDone(id);
+  }, [id, onDone]);
+
   return (
     <Card
       className={classes.noteCard}
@@ -88,6 +103,12 @@ function Note({ id, title, content, onDelete }) {
           {content}
         </Typography>
       </CardContent>
+      <Checkbox
+        className={classes.checkbox}
+        checked={checked}
+        onChange={handleCheckboxChange}
+        color="primary"
+      />
       <IconButton
         className={classes.deleteButton}
         onClick={handleClick}

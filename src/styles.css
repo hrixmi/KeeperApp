@@ -13,6 +13,9 @@ body {
   background: #f5f5f7;
   padding: 0 16px;
   color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -34,7 +37,7 @@ footer {
   text-align: center;
   width: 100%;
   height: 2.5rem;
-  padding-top: 10px;
+  padding: 10px 0;
   margin-top: auto;
 }
 
@@ -208,5 +211,37 @@ form.create-note button:hover {
   form.create-note button {
     width: 35px;
     height: 35px;
+  }
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f1f1f1;
+  margin: auto -16px;
+  padding: 16px 32px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ccc;
+}
+
+.summarize-section {
+  min-width: 150px;
+}
+
+.CreateArea {
+  width: 500px; /* or whatever width you prefer */
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .summarize-section {
+    width: 100%;
   }
 }
