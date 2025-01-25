@@ -4,55 +4,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Checkbox from '@material-ui/core/Checkbox';
 
-const useStyles = makeStyles((theme) => ({
-  noteCard: {
-    width: "100%",
-    maxWidth: 400,
-    margin: "16px auto",
-    padding: "12px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    position: "relative",
-    backgroundColor: "#ffffff",
-    transition: "transform 0.1s ease-out, box-shadow 0.2s ease-in-out",
-    transformStyle: "preserve-3d",
-    perspective: 1000,
-  },
-  title: {
-    fontSize: "1.25rem",
-    fontWeight: 500,
-    marginBottom: "8px",
-  },
-  content: {
-    fontSize: "1rem",
-    color: "#555",
-    whiteSpace: "pre-wrap",
-    wordWrap: "break-word",
-  },
-  deleteButton: {
-    position: "absolute",
-    top: "8px",
-    right: "8px",
-    color: "#f50057",
-    "&:hover": {
-      color: "#d50042",
-    },
-  },
-  checkbox: {
-    position: 'absolute',
-    top: '8px',
-    right: '48px',
-    '&:hover': {
-      color: '#388e3c',
-    },
-  },
-}));
-
 function Note({ id, title, content, onDelete, onDone }) {
-  const classes = useStyles();
   const [style, setStyle] = React.useState({});
   const [checked, setChecked] = React.useState(false);
 
@@ -90,27 +44,27 @@ function Note({ id, title, content, onDelete, onDone }) {
 
   return (
     <Card
-      className={classes.noteCard}
+      className="note-card"
       style={style}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <CardContent>
-        <Typography className={classes.title} variant="h5">
+        <Typography className="note-title" variant="h5">
           {title}
         </Typography>
-        <Typography className={classes.content} variant="body2">
+        <Typography className="note-content" variant="body2">
           {content}
         </Typography>
       </CardContent>
       <Checkbox
-        className={classes.checkbox}
+        className="note-checkbox"
         checked={checked}
         onChange={handleCheckboxChange}
         color="primary"
       />
       <IconButton
-        className={classes.deleteButton}
+        className="note-delete-button"
         onClick={handleClick}
         aria-label="delete"
       >

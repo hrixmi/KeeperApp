@@ -245,3 +245,79 @@ form.create-note button:hover {
     width: 100%;
   }
 }
+
+
+.progress-container {
+  position: relative;
+  font-size: 14px;
+  color: white;
+  background-color: #e9ecef;
+  border: solid 1px;
+  border-radius: 8px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.progress-bar {
+  padding: 0 4px;
+  z-index: 0;
+  top: 0;
+  width: 1%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #007bff;
+  white-space: nowrap;
+}
+
+.progress-text {
+  z-index: 2;
+}
+
+.note-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 16px auto;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background-color: #ffffff;
+  transition: transform 0.1s ease-out, box-shadow 0.2s ease-in-out;
+  transform-style: preserve-3d;
+  perspective: 1000;
+}
+
+.note-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.note-content {
+  font-size: 1rem;
+  color: #555;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.note-delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #f50057;
+}
+
+.note-delete-button:hover {
+  color: #d50042;
+}
+
+.note-checkbox {
+  position: absolute;
+  top: 8px;
+  right: 48px;
+}
+
+.note-checkbox:hover {
+  color: #388e3c;
+}
+

@@ -13,3 +13,5 @@ class MySummarizerPipeline {
     return this.instance;
   }
 }
+
+export default MySummarizerPipeline;

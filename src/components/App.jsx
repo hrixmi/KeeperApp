@@ -4,14 +4,79 @@ import Footer from "./Footer";
 import Note from "./Note";
 import CreateArea from "./CreateArea";
 import Button from "@material-ui/core/Button";
+import Progress from './Progress';
+import { useEffect, useRef, useState } from 'react'
 
 function App() {
+   // Model loading
+  const [ready, setReady] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [progressItems, setProgressItems] = useState([]);
+
+  const [input, setInput] = useState('I love walking my dog.');
+  const [output, setOutput] = useState('');
+  
+  const worker = useRef(null);
+
+  useEffect(() => {
+    if (!worker.current) {
+      worker.current = new Worker(new URL('./worker.js', import.meta.url), {
+        type: 'module'
+      });
+    }
+
+    const onMessageReceived = (e) => {
+      switch (e.data.status) {
+        case 'initiate':
+          setReady(false);
+          console.log('Model loading initiated...');
+          break;
+
+        case 'progress':
+          console.log('Loading progress:', e.data.progress);
+          break;
+
+        case 'ready':
+          setReady(true);
+          console.log('Model loaded and ready!');
+          break;
+
+        case 'update':
+          console.log('Partial output:', e.data.output);
+          setOutput(prev => prev + e.data.output);
+          break;
+
+        case 'complete':
+          console.log('Final summary:', e.data.output);
+          setOutput(e.data.output);
+          break;
+
+        case 'error':
+          console.error('Error:', e.data.error);
+          break;
+      }
+    };
+
+    worker.current.addEventListener('message', onMessageReceived);
+    return () => worker.current.removeEventListener('message', onMessageReceived);
+  }, []);
+
   const [notes, setNotes] = React.useState([]);
   const [completedNotes, setCompletedNotes] = React.useState([]);
 
   const addNote = React.useCallback((newNote) => {
     if (newNote.title.trim() || newNote.content.trim()) {
       setNotes(prevNotes => [...prevNotes, newNote]);
+      
+      // Combine title and content for summarization
+      const textToSummarize = `${newNote.title} ${newNote.content}`.trim();
+      console.log('Sending text for summarization:', textToSummarize);
+      
+      if (textToSummarize) {
+        worker.current.postMessage({
+          text: textToSummarize
+        });
+      }
     }
   }, []);
 
@@ -43,6 +108,7 @@ function App() {
       </div>
       <div style={{ position: 'relative' }}>
         <CreateArea onAdd={addNote} />
+        <Progress />
         <div className="summary-container" style={{
           position: 'absolute',
           top: '20px',
@@ -72,6 +138,7 @@ function App() {
           />
         ))}
       </div>
+      <Progress />
       <Footer />
     </div>
   );
